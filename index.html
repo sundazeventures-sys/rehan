@@ -1978,7 +1978,6 @@
       fb: "https://www.facebook.com/share/1H7V51HZiD/"
     };
 
-    // Sync with Firebase Cloud Database
     async function saveToCloud() {
       try {
         if (window.db && window.setDoc && window.doc) {
@@ -3809,7 +3808,6 @@
       }
     }
 
-    // Load from cloud database when page starts
     window.addEventListener('DOMContentLoaded', () => {
       renderApp();
       setTimeout(loadFromCloud, 1000);
