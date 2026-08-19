@@ -1163,10 +1163,10 @@
               </select>
             </div>
             <div>
-              <label style="font-size:0.75rem; color:var(--text-muted);">Upload File</label>
-              <input type="file" id="doc-file" accept="image/*,.pdf" required style="padding:0.35rem; font-size:0.78rem; background:var(--bg-light); border:1px solid var(--border-line); border-radius:6px; width:100%;" />
+              <label style="font-size:0.75rem; color:var(--text-muted);">Document URL</label>
+              <input type="url" id="doc-file-url" placeholder="Paste Document URL" required style="padding:0.5rem; font-size:0.82rem; background:var(--bg-light); border:1px solid var(--border-line); border-radius:6px; width:100%;" />
             </div>
-            <button type="submit" class="cta-btn" style="padding:0.55rem; justify-content:center; border-radius:6px;">Upload Doc</button>
+            <button type="submit" class="cta-btn" style="padding:0.55rem; justify-content:center; border-radius:6px;">Save Doc</button>
           </form>
 
           <div class="crm-table-wrap">
@@ -1188,12 +1188,8 @@
         <!-- 8. TAB: WATERMARKS -->
         <div id="tab-manage-watermark" class="admin-tab-content" style="display:none;">
           <form class="admin-form-group" onsubmit="adminSaveWatermarks(event)">
-            <label style="font-size:0.88rem; font-weight:600;">Upload Background Watermark Images:</label>
-            <div class="file-upload-box">
-              <input type="file" id="adm-watermark-file" accept="image/*" multiple onchange="handleMultipleImageFiles(this, 'adm-watermark-urls', 'wm-preview-list')" />
-              <input type="hidden" id="adm-watermark-urls" />
-            </div>
-            <div id="wm-preview-list" style="display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;"></div>
+            <label style="font-size:0.88rem; font-weight:600;">Background Watermark Image URLs (comma separated):</label>
+            <input type="text" id="adm-watermark-urls" placeholder="https://image1.jpg, https://image2.jpg" required />
             <button type="submit" class="cta-btn" style="padding:0.85rem; width:100%; justify-content:center; margin-top:10px;">Update Background Watermarks</button>
           </form>
         </div>
@@ -1201,12 +1197,8 @@
         <!-- 9. TAB: LOGO -->
         <div id="tab-manage-logo" class="admin-tab-content" style="display:none;">
           <form class="admin-form-group" onsubmit="adminSaveLogo(event)">
-            <label style="font-size:0.88rem; font-weight:600;">Upload Brand Logo Picture:</label>
-            <div class="file-upload-box">
-              <input type="file" id="adm-logo-file" accept="image/*" onchange="previewImageFile(this, 'adm-logo-url', 'logo-preview')" />
-              <input type="hidden" id="adm-logo-url" />
-            </div>
-            <div id="logo-preview" style="margin-top:8px;"></div>
+            <label style="font-size:0.88rem; font-weight:600;">Brand Logo Image URL:</label>
+            <input type="url" id="adm-logo-url" placeholder="https://example.com/logo.png" required />
             <button type="submit" class="cta-btn" style="padding:0.85rem; width:100%; justify-content:center; margin-top:10px;">Apply Custom Logo</button>
             <button type="button" onclick="adminResetLogo()" style="background:#ef4444; color:#fff; border:none; padding:0.6rem; border-radius:6px; cursor:pointer; font-weight:600; margin-top:10px; width:100%;">Reset to Default Logo</button>
           </form>
@@ -1218,12 +1210,8 @@
             <label style="font-size:0.88rem; font-weight:600;">About Section Heading:</label>
             <input type="text" id="adm-about-title" placeholder="Heading Title" required />
 
-            <label style="font-size:0.88rem; font-weight:600;">Upload About Section Image:</label>
-            <div class="file-upload-box">
-              <input type="file" id="adm-about-file" accept="image/*" onchange="previewImageFile(this, 'adm-about-img', 'about-img-preview')" />
-              <input type="hidden" id="adm-about-img" />
-            </div>
-            <div id="about-img-preview" style="margin-top:8px;"></div>
+            <label style="font-size:0.88rem; font-weight:600;">About Section Image URL:</label>
+            <input type="url" id="adm-about-img" placeholder="https://example.com/image.jpg" required />
 
             <label style="font-size:0.88rem; font-weight:600;">About Details / Paragraphs:</label>
             <textarea id="adm-about-text" placeholder="Enter paragraph content..." rows="5" required></textarea>
@@ -1235,12 +1223,8 @@
         <!-- 11. TAB: BANNER -->
         <div id="tab-manage-query" class="admin-tab-content" style="display:none;">
           <form class="admin-form-group" onsubmit="adminSaveQueryBanner(event)">
-            <label style="font-size:0.88rem; font-weight:600;">Upload Book Now Banner Image:</label>
-            <div class="file-upload-box">
-              <input type="file" id="adm-query-file" accept="image/*" onchange="previewImageFile(this, 'adm-query-url', 'banner-img-preview')" />
-              <input type="hidden" id="adm-query-url" />
-            </div>
-            <div id="banner-img-preview" style="margin-top:8px;"></div>
+            <label style="font-size:0.88rem; font-weight:600;">Book Now Banner Image URL:</label>
+            <input type="url" id="adm-query-url" placeholder="https://example.com/banner.jpg" required />
             <button type="submit" class="cta-btn" style="padding:0.85rem; width:100%; justify-content:center; margin-top:10px;">Update Banner Image</button>
           </form>
         </div>
@@ -1260,27 +1244,8 @@
             <input type="text" id="adm-pkg-badge" placeholder="Badge" value="5 Nights/ 6 Days" />
             <input type="text" id="adm-pkg-rate" placeholder="Rate / Cost per person" required />
             
-            <label style="font-size:0.85rem; color:var(--heading-green); font-weight:700;">Upload Exactly 3 Photos for Slideshow:</label>
-            
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 1 (Cover Photo):</label>
-              <input type="file" accept="image/*" onchange="previewPackageSingleImg(this, 0)" style="margin-top:5px;" />
-              <div id="pkg-img-prev-0" style="margin-top:5px;"></div>
-            </div>
-
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 2:</label>
-              <input type="file" accept="image/*" onchange="previewPackageSingleImg(this, 1)" style="margin-top:5px;" />
-              <div id="pkg-img-prev-1" style="margin-top:5px;"></div>
-            </div>
-
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 3:</label>
-              <input type="file" accept="image/*" onchange="previewPackageSingleImg(this, 2)" style="margin-top:5px;" />
-              <div id="pkg-img-prev-2" style="margin-top:5px;"></div>
-            </div>
-
-            <input type="hidden" id="adm-pkg-imgs-json" />
+            <label style="font-size:0.85rem; color:var(--heading-green); font-weight:700;">Enter Exactly 3 Photo URLs (comma separated):</label>
+            <input type="text" id="adm-pkg-imgs-json" placeholder="https://img1.jpg, https://img2.jpg, https://img3.jpg" required />
 
             <label style="font-size:0.85rem; color:var(--text-muted);">Detailed Itinerary:</label>
             <textarea id="adm-pkg-itinerary" placeholder="Day 1: Arrival in Srinagar..." rows="4" required></textarea>
@@ -1310,27 +1275,8 @@
             <input type="hidden" id="adm-dest-id" value="" />
             <input type="text" id="adm-dest-title" placeholder="Destination Name (e.g. Gurez Valley)" required />
             
-            <label style="font-size:0.85rem; color:var(--heading-green); font-weight:700;">Upload Exactly 3 Photos for Slideshow & Gallery:</label>
-            
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 1 (Cover Photo):</label>
-              <input type="file" accept="image/*" onchange="previewDestSingleImg(this, 0)" style="margin-top:5px;" />
-              <div id="dest-img-prev-0" style="margin-top:5px;"></div>
-            </div>
-
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 2:</label>
-              <input type="file" accept="image/*" onchange="previewDestSingleImg(this, 1)" style="margin-top:5px;" />
-              <div id="dest-img-prev-1" style="margin-top:5px;"></div>
-            </div>
-
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 3:</label>
-              <input type="file" accept="image/*" onchange="previewDestSingleImg(this, 2)" style="margin-top:5px;" />
-              <div id="dest-img-prev-2" style="margin-top:5px;"></div>
-            </div>
-
-            <input type="hidden" id="adm-dest-imgs-json" />
+            <label style="font-size:0.85rem; color:var(--heading-green); font-weight:700;">Enter Exactly 3 Photo URLs (comma separated):</label>
+            <input type="text" id="adm-dest-imgs-json" placeholder="https://img1.jpg, https://img2.jpg, https://img3.jpg" required />
 
             <textarea id="adm-dest-short" placeholder="Short description for preview card..." rows="2" required></textarea>
             <input type="text" id="adm-dest-spots" placeholder="Sub-places separated by comma" required />
@@ -1355,27 +1301,8 @@
             <input type="hidden" id="adm-sacred-id" value="" />
             <input type="text" id="adm-sacred-title" placeholder="Sacred Site Name" required />
             
-            <label style="font-size:0.85rem; color:var(--heading-green); font-weight:700;">Upload Exactly 3 Photos for Slideshow:</label>
-
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 1 (Cover Photo):</label>
-              <input type="file" accept="image/*" onchange="previewSacredSingleImg(this, 0)" style="margin-top:5px;" />
-              <div id="sacred-img-prev-0" style="margin-top:5px;"></div>
-            </div>
-
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 2:</label>
-              <input type="file" accept="image/*" onchange="previewSacredSingleImg(this, 1)" style="margin-top:5px;" />
-              <div id="sacred-img-prev-1" style="margin-top:5px;"></div>
-            </div>
-
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 3:</label>
-              <input type="file" accept="image/*" onchange="previewSacredSingleImg(this, 2)" style="margin-top:5px;" />
-              <div id="sacred-img-prev-2" style="margin-top:5px;"></div>
-            </div>
-
-            <input type="hidden" id="adm-sacred-imgs-json" />
+            <label style="font-size:0.85rem; color:var(--heading-green); font-weight:700;">Enter Exactly 3 Photo URLs (comma separated):</label>
+            <input type="text" id="adm-sacred-imgs-json" placeholder="https://img1.jpg, https://img2.jpg, https://img3.jpg" required />
 
             <textarea id="adm-sacred-short" placeholder="Short description..." rows="2" required></textarea>
             <textarea id="adm-sacred-full" placeholder="Detailed description & spiritual significance..." rows="5" required></textarea>
@@ -1401,27 +1328,8 @@
             <input type="text" id="adm-hotel-loc" placeholder="Location (e.g. Gulmarg)" required />
             <input type="text" id="adm-hotel-type" placeholder="Type" value="Premium • Restaurants: Yes" required />
             
-            <label style="font-size:0.85rem; color:var(--heading-green); font-weight:700;">Upload Exactly 3 Photos for Hotel Slideshow:</label>
-            
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 1 (Cover Photo):</label>
-              <input type="file" accept="image/*" onchange="previewHotelSingleImg(this, 0)" style="margin-top:5px;" />
-              <div id="hotel-img-prev-0" style="margin-top:5px;"></div>
-            </div>
-
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 2:</label>
-              <input type="file" accept="image/*" onchange="previewHotelSingleImg(this, 1)" style="margin-top:5px;" />
-              <div id="hotel-img-prev-1" style="margin-top:5px;"></div>
-            </div>
-
-            <div style="background:#fff; padding:10px; border-radius:8px; border:1px solid var(--border-line); margin-bottom:8px;">
-              <label style="font-size:0.80rem;">Photo 3:</label>
-              <input type="file" accept="image/*" onchange="previewHotelSingleImg(this, 2)" style="margin-top:5px;" />
-              <div id="hotel-img-prev-2" style="margin-top:5px;"></div>
-            </div>
-
-            <input type="hidden" id="adm-hotel-imgs-json" />
+            <label style="font-size:0.85rem; color:var(--heading-green); font-weight:700;">Enter Exactly 3 Photo URLs (comma separated):</label>
+            <input type="text" id="adm-hotel-imgs-json" placeholder="https://img1.jpg, https://img2.jpg, https://img3.jpg" required />
 
             <textarea id="adm-hotel-about" placeholder="About Hotel details..." rows="4" required></textarea>
             <textarea id="adm-hotel-facilities" placeholder="Facilities comma separated..." rows="3" required></textarea>
@@ -1446,12 +1354,8 @@
               <option value="offbeat">Offbeat Valleys</option>
             </select>
             
-            <label style="font-size:0.85rem; color:var(--text-muted);">Upload Photo:</label>
-            <div class="file-upload-box">
-              <input type="file" id="adm-gal-file" accept="image/*" onchange="previewImageFile(this, 'adm-gal-img', 'gallery-img-preview')" />
-              <input type="hidden" id="adm-gal-img" />
-            </div>
-            <div id="gallery-img-preview" style="margin-top:8px;"></div>
+            <label style="font-size:0.85rem; color:var(--text-muted);">Direct Photo URL:</label>
+            <input type="url" id="adm-gal-img" placeholder="https://example.com/photo.jpg" required />
 
             <button type="submit" class="cta-btn" style="padding:0.85rem; width:100%; justify-content:center; margin-top:10px;">Add Photo To Gallery</button>
           </form>
@@ -2830,23 +2734,21 @@
 
     function handleUploadDoc(e) {
       e.preventDefault();
-      const fileInput = document.getElementById('doc-file');
-      if (fileInput.files && fileInput.files[0]) {
-        compressImageFile(fileInput.files[0], 800, 0.6, function(compressedUrl) {
-          const newDoc = {
-            id: 'doc_' + Date.now(),
-            date: new Date().toLocaleDateString(),
-            title: document.getElementById('doc-title').value,
-            cat: document.getElementById('doc-cat').value,
-            dataUrl: compressedUrl
-          };
-          crmDocs.unshift(newDoc);
-          localStorage.setItem('sundaze_crm_docs', JSON.stringify(crmDocs));
-          saveToCloud();
-          e.target.reset();
-          renderVaultTable();
-          alert("Document saved in vault!");
-        });
+      const docUrl = document.getElementById('doc-file-url').value;
+      if (docUrl) {
+        const newDoc = {
+          id: 'doc_' + Date.now(),
+          date: new Date().toLocaleDateString(),
+          title: document.getElementById('doc-title').value,
+          cat: document.getElementById('doc-cat').value,
+          dataUrl: docUrl
+        };
+        crmDocs.unshift(newDoc);
+        localStorage.setItem('sundaze_crm_docs', JSON.stringify(crmDocs));
+        saveToCloud();
+        e.target.reset();
+        renderVaultTable();
+        alert("Document saved in vault!");
       }
     }
 
@@ -2969,7 +2871,7 @@
 
         <div style="margin-left:auto; width:280px; display:flex; flex-direction:column; gap:6px;">
           <div style="display:flex; justify-content:space-between; font-size:0.9rem;"><span>Total Package:</span><span>₹${total.toLocaleString('en-IN')}</span></div>
-          <div style="display:flex; justify-content:space-between; font-size:0.9rem;"><span>Advance Paid:</span><span style="color:#10b981;">₹${advance.toLocaleString('en-IN')}</span></div>
+          <div style="display:flex; justify-content:space-files; font-size:0.9rem;"><span>Advance Paid:</span><span style="color:#10b981;">₹${advance.toLocaleString('en-IN')}</span></div>
           <div style="display:flex; justify-content:space-between; font-size:1.15rem; font-weight:800; border-top:2px solid var(--heading-green); padding-top:6px; color:var(--heading-green);"><span>Balance Due:</span><span>₹${balance.toLocaleString('en-IN')}</span></div>
         </div>
 
@@ -3043,197 +2945,11 @@
       event.currentTarget.classList.add('active');
     }
 
-    function compressImageFile(file, maxWidth, quality, callback) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const img = new Image();
-        img.onload = function () {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-
-          if (width > maxWidth) {
-            height = Math.round((height * maxWidth) / width);
-            width = maxWidth;
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, width, height);
-
-          const dataUrl = canvas.toDataURL('image/jpeg', quality);
-          callback(dataUrl);
-        };
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function previewImageFile(input, targetUrlInputId, previewContainerId) {
-      if (input.files && input.files[0]) {
-        compressImageFile(input.files[0], 800, 0.6, function(compressedUrl) {
-          document.getElementById(targetUrlInputId).value = compressedUrl;
-          const prev = document.getElementById(previewContainerId);
-          if (prev) {
-            prev.innerHTML = `<img src="${compressedUrl}" style="width:80px; height:80px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">`;
-          }
-        });
-      }
-    }
-
-    function handleMultipleImageFiles(input, targetUrlInputId, previewContainerId) {
-      if (input.files && input.files.length > 0) {
-        let base64Array = [];
-        let filesProcessed = 0;
-        
-        let existingVal = document.getElementById(targetUrlInputId).value;
-        if(existingVal) {
-          base64Array = existingVal.split(',').map(s => s.trim()).filter(s => s.length > 0);
-        }
-
-        Array.from(input.files).forEach((file) => {
-          compressImageFile(file, 800, 0.6, function(compressedUrl) {
-            base64Array.push(compressedUrl);
-            filesProcessed++;
-            if (filesProcessed === input.files.length) {
-              document.getElementById(targetUrlInputId).value = base64Array.join(', ');
-              
-              const container = document.getElementById(previewContainerId);
-              if (container) {
-                container.innerHTML = base64Array.map((src, idx) => `
-                  <div style="position:relative; display:inline-block;">
-                    <img src="${src}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-                    <button type="button" onclick="removeMultiImg(${idx}, '${targetUrlInputId}', '${previewContainerId}')" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-                  </div>
-                `).join('');
-              }
-            }
-          });
-        });
-      }
-    }
-
-    function removeMultiImg(index, targetUrlInputId, previewContainerId) {
-      let val = document.getElementById(targetUrlInputId).value;
-      if(val) {
-        let arr = val.split(',').map(s => s.trim()).filter(s => s.length > 0);
-        arr.splice(index, 1);
-        document.getElementById(targetUrlInputId).value = arr.join(', ');
-        
-        const container = document.getElementById(previewContainerId);
-        if (container) {
-          container.innerHTML = arr.map((src, idx) => `
-            <div style="position:relative; display:inline-block;">
-              <img src="${src}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-              <button type="button" onclick="removeMultiImg(${idx}, '${targetUrlInputId}', '${previewContainerId}')" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-            </div>
-          `).join('');
-        }
-      }
-    }
-
-    let currentPkgImgs = ["", "", ""];
-    function previewPackageSingleImg(input, slotIndex) {
-      if (input.files && input.files[0]) {
-        compressImageFile(input.files[0], 800, 0.6, function(compressedUrl) {
-          currentPkgImgs[slotIndex] = compressedUrl;
-          document.getElementById('adm-pkg-imgs-json').value = JSON.stringify(currentPkgImgs);
-          
-          const prev = document.getElementById(`pkg-img-prev-${slotIndex}`);
-          prev.innerHTML = `
-            <div style="position:relative; display:inline-block; margin-top:5px;">
-              <img src="${compressedUrl}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-              <button type="button" onclick="clearPkgSlot(${slotIndex})" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-            </div>
-          `;
-        });
-      }
-    }
-
-    function clearPkgSlot(slotIndex) {
-      currentPkgImgs[slotIndex] = "";
-      document.getElementById('adm-pkg-imgs-json').value = JSON.stringify(currentPkgImgs);
-      document.getElementById(`pkg-img-prev-${slotIndex}`).innerHTML = "";
-    }
-
-    let currentDestImgs = ["", "", ""];
-    function previewDestSingleImg(input, slotIndex) {
-      if (input.files && input.files[0]) {
-        compressImageFile(input.files[0], 800, 0.6, function(compressedUrl) {
-          currentDestImgs[slotIndex] = compressedUrl;
-          document.getElementById('adm-dest-imgs-json').value = JSON.stringify(currentDestImgs);
-          
-          const prev = document.getElementById(`dest-img-prev-${slotIndex}`);
-          prev.innerHTML = `
-            <div style="position:relative; display:inline-block; margin-top:5px;">
-              <img src="${compressedUrl}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-              <button type="button" onclick="clearDestSlot(${slotIndex})" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-            </div>
-          `;
-        });
-      }
-    }
-
-    function clearDestSlot(slotIndex) {
-      currentDestImgs[slotIndex] = "";
-      document.getElementById('adm-dest-imgs-json').value = JSON.stringify(currentDestImgs);
-      document.getElementById(`dest-img-prev-${slotIndex}`).innerHTML = "";
-    }
-
-    let currentSacredImgs = ["", "", ""];
-    function previewSacredSingleImg(input, slotIndex) {
-      if (input.files && input.files[0]) {
-        compressImageFile(input.files[0], 800, 0.6, function(compressedUrl) {
-          currentSacredImgs[slotIndex] = compressedUrl;
-          document.getElementById('adm-sacred-imgs-json').value = JSON.stringify(currentSacredImgs);
-          
-          const prev = document.getElementById(`sacred-img-prev-${slotIndex}`);
-          prev.innerHTML = `
-            <div style="position:relative; display:inline-block; margin-top:5px;">
-              <img src="${compressedUrl}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-              <button type="button" onclick="clearSacredSlot(${slotIndex})" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-            </div>
-          `;
-        });
-      }
-    }
-
-    function clearSacredSlot(slotIndex) {
-      currentSacredImgs[slotIndex] = "";
-      document.getElementById('adm-sacred-imgs-json').value = JSON.stringify(currentSacredImgs);
-      document.getElementById(`sacred-img-prev-${slotIndex}`).innerHTML = "";
-    }
-
-    let currentHotelImgs = ["", "", ""];
-    function previewHotelSingleImg(input, slotIndex) {
-      if (input.files && input.files[0]) {
-        compressImageFile(input.files[0], 800, 0.6, function(compressedUrl) {
-          currentHotelImgs[slotIndex] = compressedUrl;
-          document.getElementById('adm-hotel-imgs-json').value = JSON.stringify(currentHotelImgs);
-          
-          const prev = document.getElementById(`hotel-img-prev-${slotIndex}`);
-          prev.innerHTML = `
-            <div style="position:relative; display:inline-block; margin-top:5px;">
-              <img src="${compressedUrl}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-              <button type="button" onclick="clearHotelSlot(${slotIndex})" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-            </div>
-          `;
-        });
-      }
-    }
-
-    function clearHotelSlot(slotIndex) {
-      currentHotelImgs[slotIndex] = "";
-      document.getElementById('adm-hotel-imgs-json').value = JSON.stringify(currentHotelImgs);
-      document.getElementById(`hotel-img-prev-${slotIndex}`).innerHTML = "";
-    }
-
     function adminSaveWatermarks(e) {
       e.preventDefault();
       const rawUrls = document.getElementById('adm-watermark-urls').value;
-      if (!rawUrls) return alert("Please select watermark images!");
-      watermarkUrls = rawUrls.split(',').map(s => s.trim());
+      if (!rawUrls) return alert("Please enter watermark image URLs!");
+      watermarkUrls = rawUrls.split(',').map(s => s.trim()).filter(s => s.length > 0);
       localStorage.setItem('sundaze_watermarks', JSON.stringify(watermarkUrls));
       saveToCloud();
       renderApp();
@@ -3244,7 +2960,7 @@
     function adminSaveLogo(e) {
       e.preventDefault();
       const logoUrl = document.getElementById('adm-logo-url').value;
-      if (!logoUrl) return alert("Please select a logo image!");
+      if (!logoUrl) return alert("Please enter a logo image URL!");
       customLogoUrl = logoUrl;
       localStorage.setItem('sundaze_custom_logo', customLogoUrl);
       saveToCloud();
@@ -3286,7 +3002,7 @@
     function adminSaveQueryBanner(e) {
       e.preventDefault();
       const bannerUrl = document.getElementById('adm-query-url').value;
-      if (!bannerUrl) return alert("Please select a banner image!");
+      if (!bannerUrl) return alert("Please enter a banner image URL!");
       queryBannerUrl = bannerUrl;
       localStorage.setItem('sundaze_query_banner', queryBannerUrl);
       saveToCloud();
@@ -3302,8 +3018,6 @@
         document.getElementById('adm-pkg-duration').value = "";
         document.getElementById('adm-pkg-badge').value = "5 Nights/ 6 Days";
         document.getElementById('adm-pkg-rate').value = "";
-        currentPkgImgs = ["", "", ""];
-        for(let i=0; i<3; i++) { document.getElementById(`pkg-img-prev-${i}`).innerHTML = ""; }
         document.getElementById('adm-pkg-imgs-json').value = "";
         document.getElementById('adm-pkg-itinerary').value = "";
         document.getElementById('adm-pkg-inclusions').value = "";
@@ -3319,24 +3033,7 @@
         document.getElementById('adm-pkg-duration').value = pkg.duration;
         document.getElementById('adm-pkg-badge').value = pkg.badge;
         document.getElementById('adm-pkg-rate').value = pkg.rate || "";
-        
-        currentPkgImgs = pkg.imgs || ["", "", ""];
-        document.getElementById('adm-pkg-imgs-json').value = JSON.stringify(currentPkgImgs);
-        
-        for(let i=0; i<3; i++) {
-          const prev = document.getElementById(`pkg-img-prev-${i}`);
-          if(currentPkgImgs[i]) {
-            prev.innerHTML = `
-              <div style="position:relative; display:inline-block; margin-top:5px;">
-                <img src="${currentPkgImgs[i]}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-                <button type="button" onclick="clearPkgSlot(${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-              </div>
-            `;
-          } else {
-            prev.innerHTML = "";
-          }
-        }
-
+        document.getElementById('adm-pkg-imgs-json').value = (pkg.imgs || []).join(', ');
         document.getElementById('adm-pkg-itinerary').value = pkg.itinerary || "";
         document.getElementById('adm-pkg-inclusions').value = pkg.inclusions || "";
         document.getElementById('adm-pkg-highlights').value = pkg.highlights || "";
@@ -3359,11 +3056,12 @@
       const duration = document.getElementById('adm-pkg-duration').value;
       const badge = document.getElementById('adm-pkg-badge').value;
       const rate = document.getElementById('adm-pkg-rate').value;
+      const imgsRaw = document.getElementById('adm-pkg-imgs-json').value;
       const itinerary = document.getElementById('adm-pkg-itinerary').value;
       const inclusions = document.getElementById('adm-pkg-inclusions').value;
       const highlights = document.getElementById('adm-pkg-highlights').value;
 
-      let finalImgs = currentPkgImgs.filter(img => img !== "");
+      let finalImgs = imgsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
       if(finalImgs.length === 0) finalImgs = ["https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80"];
 
       if (pkgId) {
@@ -3375,17 +3073,13 @@
         packages.unshift({ id: 'pkg_' + Date.now(), title, duration, badge, rate, imgs: finalImgs, itinerary, inclusions, highlights });
       }
 
-      try {
-        localStorage.setItem('sundaze_packages', JSON.stringify(packages));
-        saveToCloud();
-        renderApp();
-        closeAdminPanel();
-        e.target.reset();
-        loadPackageForEditing("");
-        alert("Package saved successfully!");
-      } catch (err) {
-        alert("Storage limit reached! Please use slightly smaller images.");
-      }
+      localStorage.setItem('sundaze_packages', JSON.stringify(packages));
+      saveToCloud();
+      renderApp();
+      closeAdminPanel();
+      e.target.reset();
+      loadPackageForEditing("");
+      alert("Package saved successfully!");
     }
 
     function adminDeleteCurrentPackage() {
@@ -3403,8 +3097,6 @@
       if (!id) {
         document.getElementById('adm-dest-id').value = "";
         document.getElementById('adm-dest-title').value = "";
-        currentDestImgs = ["", "", ""];
-        for(let i=0; i<3; i++) { document.getElementById(`dest-img-prev-${i}`).innerHTML = ""; }
         document.getElementById('adm-dest-imgs-json').value = "";
         document.getElementById('adm-dest-short').value = "";
         document.getElementById('adm-dest-spots').value = "";
@@ -3417,23 +3109,7 @@
       if (dest) {
         document.getElementById('adm-dest-id').value = dest.id;
         document.getElementById('adm-dest-title').value = dest.title;
-        currentDestImgs = dest.imgs || [dest.img, dest.img, dest.img];
-        document.getElementById('adm-dest-imgs-json').value = JSON.stringify(currentDestImgs);
-        
-        for(let i=0; i<3; i++) {
-          const prev = document.getElementById(`dest-img-prev-${i}`);
-          if(currentDestImgs[i]) {
-            prev.innerHTML = `
-              <div style="position:relative; display:inline-block; margin-top:5px;">
-                <img src="${currentDestImgs[i]}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-                <button type="button" onclick="clearDestSlot(${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-              </div>
-            `;
-          } else {
-            prev.innerHTML = "";
-          }
-        }
-
+        document.getElementById('adm-dest-imgs-json').value = (dest.imgs || dest.gallery || [dest.img]).join(', ');
         document.getElementById('adm-dest-short').value = dest.short;
         document.getElementById('adm-dest-spots').value = (dest.spots || []).join(', ');
         document.getElementById('adm-dest-full').value = dest.full.replace(/<\/?[^>]+(>|$)/g, "");
@@ -3453,12 +3129,13 @@
       e.preventDefault();
       const destId = document.getElementById('adm-dest-id').value;
       const title = document.getElementById('adm-dest-title').value;
+      const imgsRaw = document.getElementById('adm-dest-imgs-json').value;
       const short = document.getElementById('adm-dest-short').value;
       const spotsRaw = document.getElementById('adm-dest-spots').value;
       const full = document.getElementById('adm-dest-full').value;
 
       const spotsArray = spotsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
-      let finalImgs = currentDestImgs.filter(img => img !== "");
+      let finalImgs = imgsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
       if(finalImgs.length === 0) finalImgs = ["https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80"];
 
       if (destId) {
@@ -3470,17 +3147,13 @@
         destinations.unshift({ id: 'dest_' + Date.now(), title, img: finalImgs[0], imgs: finalImgs, short, spots: spotsArray, gallery: finalImgs, full: `<p>${full}</p>` });
       }
 
-      try {
-        localStorage.setItem('sundaze_destinations', JSON.stringify(destinations));
-        saveToCloud();
-        renderApp();
-        closeAdminPanel();
-        e.target.reset();
-        loadDestinationForEditing("");
-        alert("Destination saved successfully!");
-      } catch (err) {
-        alert("Storage limit reached! Please use slightly smaller images.");
-      }
+      localStorage.setItem('sundaze_destinations', JSON.stringify(destinations));
+      saveToCloud();
+      renderApp();
+      closeAdminPanel();
+      e.target.reset();
+      loadDestinationForEditing("");
+      alert("Destination saved successfully!");
     }
 
     function adminDeleteCurrentDestination() {
@@ -3498,8 +3171,6 @@
       if (!id) {
         document.getElementById('adm-sacred-id').value = "";
         document.getElementById('adm-sacred-title').value = "";
-        currentSacredImgs = ["", "", ""];
-        for(let i=0; i<3; i++) { document.getElementById(`sacred-img-prev-${i}`).innerHTML = ""; }
         document.getElementById('adm-sacred-imgs-json').value = "";
         document.getElementById('adm-sacred-short').value = "";
         document.getElementById('adm-sacred-full').value = "";
@@ -3511,23 +3182,7 @@
       if (site) {
         document.getElementById('adm-sacred-id').value = site.id;
         document.getElementById('adm-sacred-title').value = site.title;
-        currentSacredImgs = site.imgs || [site.img, site.img, site.img];
-        document.getElementById('adm-sacred-imgs-json').value = JSON.stringify(currentSacredImgs);
-        
-        for(let i=0; i<3; i++) {
-          const prev = document.getElementById(`sacred-img-prev-${i}`);
-          if(currentSacredImgs[i]) {
-            prev.innerHTML = `
-              <div style="position:relative; display:inline-block; margin-top:5px;">
-                <img src="${currentSacredImgs[i]}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-                <button type="button" onclick="clearSacredSlot(${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-              </div>
-            `;
-          } else {
-            prev.innerHTML = "";
-          }
-        }
-
+        document.getElementById('adm-sacred-imgs-json').value = (site.imgs || [site.img]).join(', ');
         document.getElementById('adm-sacred-short').value = site.short;
         document.getElementById('adm-sacred-full').value = site.full.replace(/<\/?[^>]+(>|$)/g, "");
         document.getElementById('adm-sacred-submit-btn').innerText = "Update Sacred Site Info";
@@ -3546,10 +3201,11 @@
       e.preventDefault();
       const sacredId = document.getElementById('adm-sacred-id').value;
       const title = document.getElementById('adm-sacred-title').value;
+      const imgsRaw = document.getElementById('adm-sacred-imgs-json').value;
       const short = document.getElementById('adm-sacred-short').value;
       const full = document.getElementById('adm-sacred-full').value;
 
-      let finalImgs = currentSacredImgs.filter(img => img !== "");
+      let finalImgs = imgsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
       if(finalImgs.length === 0) finalImgs = ["https://images.unsplash.com/photo-1591088398332-8a7791972843?auto=format&fit=crop&w=800&q=80"];
 
       if (sacredId) {
@@ -3561,17 +3217,13 @@
         sacredSites.unshift({ id: 'sacred_' + Date.now(), title, img: finalImgs[0], imgs: finalImgs, short, full: `<p>${full}</p>` });
       }
 
-      try {
-        localStorage.setItem('sundaze_sacred', JSON.stringify(sacredSites));
-        saveToCloud();
-        renderApp();
-        closeAdminPanel();
-        e.target.reset();
-        loadSacredForEditing("");
-        alert("Sacred site saved successfully!");
-      } catch (err) {
-        alert("Storage limit reached! Please use slightly smaller images.");
-      }
+      localStorage.setItem('sundaze_sacred', JSON.stringify(sacredSites));
+      saveToCloud();
+      renderApp();
+      closeAdminPanel();
+      e.target.reset();
+      loadSacredForEditing("");
+      alert("Sacred site saved successfully!");
     }
 
     function adminDeleteCurrentSacred() {
@@ -3591,8 +3243,6 @@
         document.getElementById('adm-hotel-name').value = "";
         document.getElementById('adm-hotel-loc').value = "";
         document.getElementById('adm-hotel-type').value = "Premium • Restaurants: Yes";
-        currentHotelImgs = ["", "", ""];
-        for(let i=0; i<3; i++) { document.getElementById(`hotel-img-prev-${i}`).innerHTML = ""; }
         document.getElementById('adm-hotel-imgs-json').value = "";
         document.getElementById('adm-hotel-about').value = "";
         document.getElementById('adm-hotel-facilities').value = "";
@@ -3606,24 +3256,7 @@
         document.getElementById('adm-hotel-name').value = hotel.name;
         document.getElementById('adm-hotel-loc').value = hotel.location;
         document.getElementById('adm-hotel-type').value = hotel.type;
-        
-        currentHotelImgs = hotel.imgs || (hotel.images && hotel.images.length > 0 ? hotel.images : [hotel.img, hotel.img, hotel.img]);
-        document.getElementById('adm-hotel-imgs-json').value = JSON.stringify(currentHotelImgs);
-
-        for(let i=0; i<3; i++) {
-          const prev = document.getElementById(`hotel-img-prev-${i}`);
-          if(currentHotelImgs[i]) {
-            prev.innerHTML = `
-              <div style="position:relative; display:inline-block; margin-top:5px;">
-                <img src="${currentHotelImgs[i]}" style="width:60px; height:60px; object-fit:cover; border-radius:6px; border:1px solid var(--btn-green);">
-                <button type="button" onclick="clearHotelSlot(${i})" style="position:absolute; top:-5px; right:-5px; background:red; color:#fff; border:none; border-radius:50%; width:20px; height:20px; font-size:10px; cursor:pointer;">&times;</button>
-              </div>
-            `;
-          } else {
-            prev.innerHTML = "";
-          }
-        }
-
+        document.getElementById('adm-hotel-imgs-json').value = (hotel.imgs || hotel.images || [hotel.img]).join(', ');
         document.getElementById('adm-hotel-about').value = hotel.about;
         document.getElementById('adm-hotel-facilities').value = hotel.facilities;
         document.getElementById('adm-hotel-submit-btn').innerText = "Update Hotel Info";
@@ -3644,10 +3277,11 @@
       const name = document.getElementById('adm-hotel-name').value;
       const location = document.getElementById('adm-hotel-loc').value;
       const type = document.getElementById('adm-hotel-type').value;
+      const imgsRaw = document.getElementById('adm-hotel-imgs-json').value;
       const about = document.getElementById('adm-hotel-about').value;
       const facilities = document.getElementById('adm-hotel-facilities').value;
 
-      let finalImgs = currentHotelImgs.filter(img => img !== "");
+      let finalImgs = imgsRaw.split(',').map(s => s.trim()).filter(s => s.length > 0);
       if(finalImgs.length === 0) finalImgs = ["https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80"];
 
       if (hotelId) {
@@ -3681,17 +3315,13 @@
         });
       }
 
-      try {
-        localStorage.setItem('sundaze_hotels', JSON.stringify(hotels));
-        saveToCloud();
-        renderApp();
-        closeAdminPanel();
-        e.target.reset();
-        loadHotelForEditing("");
-        alert("Hotel saved successfully!");
-      } catch (err) {
-        alert("Storage limit reached! Please use slightly smaller images.");
-      }
+      localStorage.setItem('sundaze_hotels', JSON.stringify(hotels));
+      saveToCloud();
+      renderApp();
+      closeAdminPanel();
+      e.target.reset();
+      loadHotelForEditing("");
+      alert("Hotel saved successfully!");
     }
 
     function adminDeleteCurrentHotel() {
@@ -3711,7 +3341,7 @@
       const cat = document.getElementById('adm-photo-cat').value;
       const img = document.getElementById('adm-gal-img').value;
 
-      if (!img) return alert("Please upload a picture!");
+      if (!img) return alert("Please enter image URL!");
 
       galleryPhotos.unshift({
         id: 'gal_' + Date.now(),
@@ -3721,16 +3351,12 @@
         sub: cat.charAt(0).toUpperCase() + cat.slice(1)
       });
 
-      try {
-        localStorage.setItem('sundaze_gallery', JSON.stringify(galleryPhotos));
-        saveToCloud();
-        renderGallery();
-        alert("Photo added successfully!");
-        closeAdminPanel();
-        e.target.reset();
-      } catch (err) {
-        alert("Storage limit reached! Please use slightly smaller images.");
-      }
+      localStorage.setItem('sundaze_gallery', JSON.stringify(galleryPhotos));
+      saveToCloud();
+      renderGallery();
+      alert("Photo added successfully!");
+      closeAdminPanel();
+      e.target.reset();
     }
 
     function adminSaveSettings(e) {
