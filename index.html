@@ -479,6 +479,30 @@
       .footer-container { grid-template-columns: 1fr; }
     }
   </style>
+
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCfOKsvZIoGH9ItWCIpHVmulAge21fQAak",
+      authDomain: "sundaze-ventures.firebaseapp.com",
+      projectId: "sundaze-ventures",
+      storageBucket: "sundaze-ventures.firebasestorage.app",
+      messagingSenderId: "58352601341",
+      appId: "1:58352601341:web:fb66565c359a00d6bf5694",
+      measurementId: "G-PK7MHKYBJV"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.db = db;
+    window.doc = doc;
+    window.setDoc = setDoc;
+    window.getDoc = getDoc;
+  </script>
 </head>
 <body>
 
@@ -1928,30 +1952,15 @@
     let galleryPhotos = JSON.parse(localStorage.getItem('sundaze_gallery')) || defaultGalleryPhotos;
     let watermarkUrls = JSON.parse(localStorage.getItem('sundaze_watermarks')) || defaultWatermarks;
     
-    // Load custom logo if user set it previously
     let customLogoUrl = localStorage.getItem('sundaze_custom_logo') || "";
     let queryBannerUrl = localStorage.getItem('sundaze_query_banner') || "https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=600&q=80";
 
-    let crmLeads = JSON.parse(localStorage.getItem('sundaze_crm_leads')) || [
-      { id: 'lead_101', date: '2026-08-15 10:30 AM', name: 'Amit Khanna', contact: '9876543210', email: 'amit@example.com', checkin: '2026-09-10', pax: '2', message: 'Kashmir Honeymoon Package for couple', status: 'Interested' },
-      { id: 'lead_102', date: '2026-08-16 02:15 PM', name: 'Priya Mehta', contact: '9123456780', email: 'priya@gmail.com', checkin: '2026-09-22', pax: '4', message: 'Family trip 4 Pax with Gulmarg Stay', status: 'New' }
-    ];
-
-    let crmBookings = JSON.parse(localStorage.getItem('sundaze_crm_bookings')) || [
-      { id: 'BK-8901', name: 'Amit Khanna', phone: '9876543210', email: 'amit@example.com', package: 'Kashmir Honeymoon Special', date: '2026-09-10', pax: 2, cab: 'Innova Crysta', total: 45000, advance: 15000, status: 'Confirmed' }
-    ];
-
-    let crmExpenses = JSON.parse(localStorage.getItem('sundaze_crm_expenses')) || [
-      { id: 'exp_1', title: 'Pine Palace Gulmarg Room Booking', cat: 'Hotel', amount: 12000, date: '2026-08-16' },
-      { id: 'exp_2', title: 'Cab Fuel & Driver Advance', cat: 'Transport', amount: 4500, date: '2026-08-17' }
-    ];
-
+    let crmLeads = JSON.parse(localStorage.getItem('sundaze_crm_leads')) || [];
+    let crmBookings = JSON.parse(localStorage.getItem('sundaze_crm_bookings')) || [];
+    let crmExpenses = JSON.parse(localStorage.getItem('sundaze_crm_expenses')) || [];
     let crmDocs = JSON.parse(localStorage.getItem('sundaze_crm_docs')) || [];
-
-    // Load staff/admin credentials from localStorage so user password won't reset on updates
     let crmStaff = JSON.parse(localStorage.getItem('sundaze_crm_staff')) || [
-      { username: 'rehankhan', password: 'siddhi', role: 'Admin' },
-      { username: 'accountant_sundaze', password: 'cash123', role: 'Accountant' }
+      { username: 'rehankhan', password: 'siddhi', role: 'Admin' }
     ];
 
     let aboutUsData = JSON.parse(localStorage.getItem('sundaze_about')) || {
@@ -1969,6 +1978,51 @@
       fb: "https://www.facebook.com/share/1H7V51HZiD/"
     };
 
+    // Sync with Firebase Cloud Database
+    async function saveToCloud() {
+      try {
+        if (window.db && window.setDoc && window.doc) {
+          const payload = {
+            packages, destinations, sacredSites, hotels, galleryPhotos,
+            watermarkUrls, customLogoUrl, queryBannerUrl, crmLeads,
+            crmBookings, crmExpenses, crmDocs, crmStaff, aboutUsData, agencySettings
+          };
+          await window.setDoc(window.doc(window.db, "sundazeData", "mainStore"), payload);
+        }
+      } catch (e) {
+        console.log("Cloud sync error:", e);
+      }
+    }
+
+    async function loadFromCloud() {
+      try {
+        if (window.db && window.getDoc && window.doc) {
+          const snap = await window.getDoc(window.doc(window.db, "sundazeData", "mainStore"));
+          if (snap.exists()) {
+            const data = snap.data();
+            if (data.packages) packages = data.packages;
+            if (data.destinations) destinations = data.destinations;
+            if (data.sacredSites) sacredSites = data.sacredSites;
+            if (data.hotels) hotels = data.hotels;
+            if (data.galleryPhotos) galleryPhotos = data.galleryPhotos;
+            if (data.watermarkUrls) watermarkUrls = data.watermarkUrls;
+            if (data.customLogoUrl !== undefined) customLogoUrl = data.customLogoUrl;
+            if (data.queryBannerUrl) queryBannerUrl = data.queryBannerUrl;
+            if (data.crmLeads) crmLeads = data.crmLeads;
+            if (data.crmBookings) crmBookings = data.crmBookings;
+            if (data.crmExpenses) crmExpenses = data.crmExpenses;
+            if (data.crmDocs) crmDocs = data.crmDocs;
+            if (data.crmStaff) crmStaff = data.crmStaff;
+            if (data.aboutUsData) aboutUsData = data.aboutUsData;
+            if (data.agencySettings) agencySettings = data.agencySettings;
+            renderApp();
+          }
+        }
+      } catch (e) {
+        console.log("Cloud load error:", e);
+      }
+    }
+
     let activeGalleryFilter = 'all';
     let isAdminLoggedIn = false;
     let currentAuthUser = null;
@@ -1982,7 +2036,6 @@
     function renderApp() {
       clearAllSlideshows();
 
-      // Watermarks
       const wmLayer = document.getElementById('bgWatermarkLayer');
       wmLayer.innerHTML = watermarkUrls.map((url, index) => {
         const positions = [
@@ -1995,7 +2048,6 @@
         return `<div class="bg-wm-item" style="${posStyle} background-image: url('${url}');"></div>`;
       }).join('');
 
-      // Logo Persistence
       if (customLogoUrl) {
         document.getElementById('navCustomLogo').src = customLogoUrl;
         document.getElementById('navCustomLogo').style.display = 'block';
@@ -2012,10 +2064,8 @@
         document.getElementById('heroDefaultLogo').style.display = 'flex';
       }
 
-      // Query Banner
       document.getElementById('queryBannerImg').src = queryBannerUrl;
 
-      // About Us
       document.getElementById('disp-about-title').innerText = aboutUsData.title;
       document.getElementById('disp-about-img').src = aboutUsData.img;
       document.getElementById('disp-about-text').innerHTML = aboutUsData.text;
@@ -2026,7 +2076,6 @@
         document.getElementById('adm-about-text').value = aboutUsData.text.replace(/<\/?[^>]+(>|$)/g, "");
       }
 
-      // Packages
       const pkgContainer = document.getElementById('packagesContainer');
       pkgContainer.innerHTML = packages.map(pkg => {
         const imgs = (pkg.imgs && pkg.imgs.length > 0) ? pkg.imgs : ["https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80"];
@@ -2061,7 +2110,6 @@
 
       startCardSlideshows('pkg_slideshow_', packages);
 
-      // Destinations
       const destContainer = document.getElementById('destinationsContainer');
       destContainer.innerHTML = destinations.map(dest => {
         const imgs = (dest.imgs && dest.imgs.length > 0) ? dest.imgs : (dest.gallery && dest.gallery.length > 0 ? dest.gallery : [dest.img]);
@@ -2096,7 +2144,6 @@
 
       startCardSlideshows('dest_slideshow_', destinations);
 
-      // Sacred Sites
       const sacredContainer = document.getElementById('sacredContainer');
       sacredContainer.innerHTML = sacredSites.map(site => {
         const imgs = (site.imgs && site.imgs.length > 0) ? site.imgs : [site.img];
@@ -2128,7 +2175,6 @@
 
       startCardSlideshows('sacred_slideshow_', sacredSites);
 
-      // Hotels
       const hotelsContainer = document.getElementById('hotelsContainer');
       hotelsContainer.innerHTML = hotels.map(hotel => {
         const imgs = (hotel.imgs && hotel.imgs.length > 0) ? hotel.imgs : (hotel.images && hotel.images.length > 0 ? hotel.images : [hotel.img || "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80"]);
@@ -2173,7 +2219,6 @@
 
       renderGallery();
 
-      // Contact Info
       document.getElementById('disp-phone').innerText = agencySettings.phone;
       document.getElementById('disp-email').innerText = agencySettings.email;
       document.getElementById('disp-address').innerText = agencySettings.address;
@@ -2384,6 +2429,7 @@
       };
       crmLeads.unshift(newLead);
       localStorage.setItem('sundaze_crm_leads', JSON.stringify(crmLeads));
+      saveToCloud();
       renderLeadsTable();
       renderCustomersTable();
       refreshCRMAnalytics();
@@ -2515,6 +2561,7 @@
       if (idx !== -1) {
         crmLeads[idx].status = newStatus;
         localStorage.setItem('sundaze_crm_leads', JSON.stringify(crmLeads));
+        saveToCloud();
         renderLeadsTable();
         refreshCRMAnalytics();
       }
@@ -2537,6 +2584,7 @@
       if (confirm("Delete this lead?")) {
         crmLeads = crmLeads.filter(l => l.id !== id);
         localStorage.setItem('sundaze_crm_leads', JSON.stringify(crmLeads));
+        saveToCloud();
         renderLeadsTable();
         refreshCRMAnalytics();
       }
@@ -2630,6 +2678,7 @@
       if (amount !== null && !isNaN(amount)) {
         b.advance = Number(amount);
         localStorage.setItem('sundaze_crm_bookings', JSON.stringify(crmBookings));
+        saveToCloud();
         renderBookingsTable();
         renderPaymentsTable();
         refreshCRMAnalytics();
@@ -2641,6 +2690,7 @@
       if (idx !== -1) {
         crmBookings[idx].status = newStatus;
         localStorage.setItem('sundaze_crm_bookings', JSON.stringify(crmBookings));
+        saveToCloud();
         renderBookingsTable();
         refreshCRMAnalytics();
       }
@@ -2650,6 +2700,7 @@
       if (confirm("Delete this booking record?")) {
         crmBookings = crmBookings.filter(b => b.id !== id);
         localStorage.setItem('sundaze_crm_bookings', JSON.stringify(crmBookings));
+        saveToCloud();
         renderBookingsTable();
         renderPaymentsTable();
         renderCustomersTable();
@@ -2692,6 +2743,7 @@
 
       crmBookings.unshift(newBooking);
       localStorage.setItem('sundaze_crm_bookings', JSON.stringify(crmBookings));
+      saveToCloud();
       
       closeNewBookingModal();
       renderBookingsTable();
@@ -2748,6 +2800,7 @@
       };
       crmExpenses.unshift(newExp);
       localStorage.setItem('sundaze_crm_expenses', JSON.stringify(crmExpenses));
+      saveToCloud();
       e.target.reset();
       renderExpensesTable();
       refreshCRMAnalytics();
@@ -2770,6 +2823,7 @@
       if (confirm("Delete this expense?")) {
         crmExpenses = crmExpenses.filter(e => e.id !== id);
         localStorage.setItem('sundaze_crm_expenses', JSON.stringify(crmExpenses));
+        saveToCloud();
         renderExpensesTable();
         refreshCRMAnalytics();
       }
@@ -2789,6 +2843,7 @@
           };
           crmDocs.unshift(newDoc);
           localStorage.setItem('sundaze_crm_docs', JSON.stringify(crmDocs));
+          saveToCloud();
           e.target.reset();
           renderVaultTable();
           alert("Document saved in vault!");
@@ -2817,6 +2872,7 @@
       if (confirm("Delete this document?")) {
         crmDocs = crmDocs.filter(d => d.id !== id);
         localStorage.setItem('sundaze_crm_docs', JSON.stringify(crmDocs));
+        saveToCloud();
         renderVaultTable();
       }
     }
@@ -2830,6 +2886,7 @@
       };
       crmStaff.push(newStaff);
       localStorage.setItem('sundaze_crm_staff', JSON.stringify(crmStaff));
+      saveToCloud();
       e.target.reset();
       renderStaffTable();
       alert("New staff login created!");
@@ -2852,6 +2909,7 @@
       if (confirm("Remove user account?")) {
         crmStaff = crmStaff.filter(s => s.username !== username);
         localStorage.setItem('sundaze_crm_staff', JSON.stringify(crmStaff));
+        saveToCloud();
         renderStaffTable();
       }
     }
@@ -2986,7 +3044,6 @@
       event.currentTarget.classList.add('active');
     }
 
-    // Auto Image Compressor & Resizer (Storage limit ko khatam karne ke liye)
     function compressImageFile(file, maxWidth, quality, callback) {
       const reader = new FileReader();
       reader.onload = function (e) {
@@ -3077,7 +3134,6 @@
       }
     }
 
-    /* 3-Photo Handlers */
     let currentPkgImgs = ["", "", ""];
     function previewPackageSingleImg(input, slotIndex) {
       if (input.files && input.files[0]) {
@@ -3180,6 +3236,7 @@
       if (!rawUrls) return alert("Please select watermark images!");
       watermarkUrls = rawUrls.split(',').map(s => s.trim());
       localStorage.setItem('sundaze_watermarks', JSON.stringify(watermarkUrls));
+      saveToCloud();
       renderApp();
       alert("Watermarks updated!");
       closeAdminPanel();
@@ -3191,6 +3248,7 @@
       if (!logoUrl) return alert("Please select a logo image!");
       customLogoUrl = logoUrl;
       localStorage.setItem('sundaze_custom_logo', customLogoUrl);
+      saveToCloud();
       renderApp();
       alert("Logo updated!");
       closeAdminPanel();
@@ -3200,6 +3258,7 @@
       if (confirm("Reset to default logo?")) {
         customLogoUrl = "";
         localStorage.removeItem('sundaze_custom_logo');
+        saveToCloud();
         renderApp();
         closeAdminPanel();
       }
@@ -3219,6 +3278,7 @@
       };
 
       localStorage.setItem('sundaze_about', JSON.stringify(aboutUsData));
+      saveToCloud();
       renderApp();
       alert("About Us updated!");
       closeAdminPanel();
@@ -3230,6 +3290,7 @@
       if (!bannerUrl) return alert("Please select a banner image!");
       queryBannerUrl = bannerUrl;
       localStorage.setItem('sundaze_query_banner', queryBannerUrl);
+      saveToCloud();
       renderApp();
       alert("Banner updated!");
       closeAdminPanel();
@@ -3317,6 +3378,7 @@
 
       try {
         localStorage.setItem('sundaze_packages', JSON.stringify(packages));
+        saveToCloud();
         renderApp();
         closeAdminPanel();
         e.target.reset();
@@ -3332,6 +3394,7 @@
       if (pkgId && confirm("Delete this package?")) {
         packages = packages.filter(p => p.id !== pkgId);
         localStorage.setItem('sundaze_packages', JSON.stringify(packages));
+        saveToCloud();
         renderApp();
         closeAdminPanel();
       }
@@ -3410,6 +3473,7 @@
 
       try {
         localStorage.setItem('sundaze_destinations', JSON.stringify(destinations));
+        saveToCloud();
         renderApp();
         closeAdminPanel();
         e.target.reset();
@@ -3425,6 +3489,7 @@
       if (destId && confirm("Delete this destination?")) {
         destinations = destinations.filter(d => d.id !== destId);
         localStorage.setItem('sundaze_destinations', JSON.stringify(destinations));
+        saveToCloud();
         renderApp();
         closeAdminPanel();
       }
@@ -3499,6 +3564,7 @@
 
       try {
         localStorage.setItem('sundaze_sacred', JSON.stringify(sacredSites));
+        saveToCloud();
         renderApp();
         closeAdminPanel();
         e.target.reset();
@@ -3514,6 +3580,7 @@
       if (sacredId && confirm("Delete this sacred site?")) {
         sacredSites = sacredSites.filter(s => s.id !== sacredId);
         localStorage.setItem('sundaze_sacred', JSON.stringify(sacredSites));
+        saveToCloud();
         renderApp();
         closeAdminPanel();
       }
@@ -3617,6 +3684,7 @@
 
       try {
         localStorage.setItem('sundaze_hotels', JSON.stringify(hotels));
+        saveToCloud();
         renderApp();
         closeAdminPanel();
         e.target.reset();
@@ -3632,6 +3700,7 @@
       if (hotelId && confirm("Delete this hotel?")) {
         hotels = hotels.filter(h => h.id !== hotelId);
         localStorage.setItem('sundaze_hotels', JSON.stringify(hotels));
+        saveToCloud();
         renderApp();
         closeAdminPanel();
       }
@@ -3655,6 +3724,7 @@
 
       try {
         localStorage.setItem('sundaze_gallery', JSON.stringify(galleryPhotos));
+        saveToCloud();
         renderGallery();
         alert("Photo added successfully!");
         closeAdminPanel();
@@ -3675,6 +3745,7 @@
         fb: document.getElementById('adm-set-fb').value
       };
       localStorage.setItem('sundaze_settings', JSON.stringify(agencySettings));
+      saveToCloud();
       renderApp();
       alert("Settings saved!");
       closeAdminPanel();
@@ -3687,6 +3758,7 @@
 
       crmStaff[0] = { username: newU, password: newP, role: 'Admin' };
       localStorage.setItem('sundaze_crm_staff', JSON.stringify(crmStaff));
+      saveToCloud();
       alert("Credentials updated!");
       closeAdminPanel();
     }
@@ -3695,6 +3767,7 @@
       if (confirm("Delete this package?")) {
         packages = packages.filter(p => p.id !== id);
         localStorage.setItem('sundaze_packages', JSON.stringify(packages));
+        saveToCloud();
         renderApp();
       }
     }
@@ -3703,8 +3776,8 @@
       if (confirm("Delete this destination?")) {
         destinations = destinations.filter(d => d.id !== id);
         localStorage.setItem('sundaze_destinations', JSON.stringify(destinations));
+        saveToCloud();
         renderApp();
-        new App();
       }
     }
 
@@ -3712,6 +3785,7 @@
       if (confirm("Delete this sacred site?")) {
         sacredSites = sacredSites.filter(s => s.id !== id);
         localStorage.setItem('sundaze_sacred', JSON.stringify(sacredSites));
+        saveToCloud();
         renderApp();
       }
     }
@@ -3720,6 +3794,7 @@
       if (confirm("Delete this hotel?")) {
         hotels = hotels.filter(h => h.id !== id);
         localStorage.setItem('sundaze_hotels', JSON.stringify(hotels));
+        saveToCloud();
         renderApp();
       }
     }
@@ -3729,11 +3804,16 @@
       if (confirm("Remove this photo?")) {
         galleryPhotos = galleryPhotos.filter(p => p.id !== id);
         localStorage.setItem('sundaze_gallery', JSON.stringify(galleryPhotos));
+        saveToCloud();
         renderGallery();
       }
     }
 
-    renderApp();
+    // Load from cloud database when page starts
+    window.addEventListener('DOMContentLoaded', () => {
+      renderApp();
+      setTimeout(loadFromCloud, 1000);
+    });
   </script>
 </body>
 </html>
