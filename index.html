@@ -18,12 +18,12 @@
       --primary: #062A5C;
       --primary-hover: #041d40;
       
-      /* Green Theme Palette */
-      --btn-green: #059669;
-      --btn-green-hover: #047857;
-      --btn-green-glow: rgba(5, 150, 105, 0.35);
-      --heading-green: #059669;
-      --header-bg-green: #059669;
+      /* Navy Blue Theme Palette */
+      --btn-green: #062A5C;
+      --btn-green-hover: #041d40;
+      --btn-green-glow: rgba(6, 42, 92, 0.35);
+      --heading-green: #062A5C;
+      --header-bg-green: #062A5C;
       
       --bg-white: #FFFFFF;
       --bg-light: #F5F6F8;
@@ -34,10 +34,10 @@
       --text-white: #FFFFFF;
       
       --border-line: #e2e8f0;
-      --border-green: rgba(5, 150, 105, 0.4);
+      --border-green: rgba(6, 42, 92, 0.4);
       
       --wa-green: #25d366;
-      --call-green: #059669;
+      --call-green: #062A5C;
       --danger: #ef4444;
       --success: #10b981;
       
@@ -83,7 +83,7 @@
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--btn-green); }
 
-    /* Top Navigation Bar - Full Green Background */
+    /* Top Navigation Bar - Full Navy Blue Background */
     header {
       background: var(--header-bg-green);
       backdrop-filter: blur(14px);
@@ -92,7 +92,7 @@
       top: 0;
       z-index: 1000;
       border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 15px rgba(5, 150, 105, 0.25);
+      box-shadow: 0 4px 15px rgba(6, 42, 92, 0.25);
     }
 
     .navbar {
@@ -102,6 +102,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 0.8rem 2rem;
+      position: relative;
     }
 
     .logo-container { text-decoration: none; display: flex; align-items: center; gap: 12px; }
@@ -112,9 +113,9 @@
     .logo-badge .top-row i { color: #ffffff; font-size: 1.4rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .logo-badge .title-main { font-size: 1.45rem; color: #ffffff; text-shadow: 0 1px 3px rgba(0,0,0,0.2); }
     .logo-badge .title-sub { font-size: 0.9rem; color: #ffffff; }
-    .logo-badge .tour-sub { font-size: 0.68rem; color: #d1fae5; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
+    .logo-badge .tour-sub { font-size: 0.68rem; color: #93c5fd; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; }
 
-    .nav-links { display: flex; list-style: none; gap: 1.2rem; align-items: center; flex-wrap: wrap; }
+    .nav-links { display: flex; list-style: none; gap: 1.2rem; align-items: center; }
     .nav-links a, .nav-btn-link { 
       color: #ffffff; 
       text-decoration: none; 
@@ -128,8 +129,55 @@
       border-radius: 6px;
     }
     .nav-links a:hover, .nav-btn-link:hover { 
-      color: #042f1a; 
-      background: rgba(255, 255, 255, 0.85); 
+      color: var(--primary); 
+      background: rgba(255, 255, 255, 0.9); 
+    }
+
+    /* Hamburger Menu Top Right */
+    .menu-toggle {
+      display: none;
+      font-size: 1.6rem;
+      color: #ffffff;
+      cursor: pointer;
+      background: none;
+      border: none;
+    }
+
+    /* Menu Contact Details Box (Mobile Only) */
+    .menu-contact-info {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      margin-bottom: 0.5rem;
+      width: 100%;
+      color: #e2e8f0;
+      font-size: 0.82rem;
+    }
+    .menu-contact-info a { color: #fff; text-decoration: none; display: flex; align-items: center; gap: 6px; }
+
+    @media (max-width: 992px) {
+      .menu-toggle { display: block; }
+      .menu-contact-info { display: flex; }
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        width: 260px;
+        background: var(--header-bg-green);
+        padding: 1.2rem 1.5rem 1.8rem 1.5rem;
+        border-radius: 0 0 0 12px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        gap: 0.6rem;
+        align-items: flex-start;
+      }
+      .nav-links.active { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a, .nav-btn-link { display: block; width: 100%; padding: 0.4rem 0; }
     }
 
     .btn-owner-nav {
@@ -148,9 +196,8 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     }
     .btn-owner-nav:hover {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #fff;
+      background: #ffffff;
+      color: var(--primary-hover);
       transform: translateY(-1px);
     }
 
@@ -195,7 +242,7 @@
 
     .hero-features-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; margin: 1rem 0; }
     .hero-features-list li { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 0.92rem; color: var(--text-main); }
-    .hero-feat-icon { width: 32px; height: 32px; background: rgba(5, 150, 105, 0.15); border: 1px solid var(--heading-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--heading-green); font-size: 0.85rem; }
+    .hero-feat-icon { width: 32px; height: 32px; background: rgba(6, 42, 92, 0.1); border: 1px solid var(--heading-green); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--heading-green); font-size: 0.85rem; }
 
     .hero-btn-group { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.8rem; }
     
@@ -225,7 +272,7 @@
       border: 1px solid var(--border-green); 
       border-radius: 16px; 
       padding: 2rem; 
-      box-shadow: 0 15px 35px rgba(5, 150, 105, 0.12); 
+      box-shadow: 0 15px 35px rgba(6, 42, 92, 0.12); 
       display: grid; 
       grid-template-columns: 1fr 1.2fr; 
       gap: 1.5rem; 
@@ -295,7 +342,7 @@
 
     .custom-card:hover {
       transform: translateY(-7px);
-      box-shadow: 0 15px 35px rgba(5, 150, 105, 0.12);
+      box-shadow: 0 15px 35px rgba(6, 42, 92, 0.12);
       border-color: var(--heading-green);
     }
 
@@ -357,7 +404,7 @@
 
     /* Services & Reviews */
     .service-box, .review-card { background: var(--bg-white); border: 1px solid var(--border-line); padding: 2.2rem 1.8rem; border-radius: var(--radius-md); transition: transform 0.3s ease; box-shadow: 0 4px 15px rgba(6, 42, 92, 0.03); }
-    .service-box:hover, .review-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(5, 150, 105, 0.08); }
+    .service-box:hover, .review-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(6, 42, 92, 0.08); }
     .service-box i { font-size: 2.2rem; color: var(--heading-green); margin-bottom: 1.2rem; }
     .service-box h3 { font-size: 1.2rem; margin-bottom: 0.8rem; font-family: 'Outfit', sans-serif; color: var(--heading-green); }
     .service-box p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; }
@@ -462,7 +509,7 @@
     .crm-btn-sm { background: var(--bg-light); border: 1px solid var(--border-line); color: var(--text-main); padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
     .crm-btn-sm:hover { background: var(--heading-green); color: #fff; border-color: var(--heading-green); }
     .crm-btn-green { background: var(--heading-green); color: #fff; font-weight: 700; border: none; }
-    .crm-btn-green:hover { background: #047857; }
+    .crm-btn-green:hover { background: var(--primary-hover); }
     .crm-btn-wa { background: #25d366; color: #fff; font-weight: 700; border: none; }
     .crm-btn-wa:hover { background: #1da851; }
 
@@ -473,7 +520,7 @@
     }
 
     @media (max-width: 768px) {
-      .navbar { flex-direction: column; gap: 1rem; }
+      .navbar { flex-direction: row; justify-content: space-between; align-items: center; }
       .nav-links { flex-wrap: wrap; justify-content: center; gap: 1rem; }
       .hero-brand-name { font-size: 2.8rem; }
       .footer-container { grid-template-columns: 1fr; }
@@ -512,6 +559,7 @@
   <!-- Navigation Bar (Header) -->
   <header>
     <nav class="navbar">
+      <!-- Logo Left Side -->
       <a href="#home" class="logo-container">
         <img id="navCustomLogo" class="nav-custom-logo-img" style="display:none;" alt="Sundaze Ventures Logo" />
         <div id="navDefaultLogo" class="logo-badge">
@@ -523,17 +571,28 @@
           <span class="tour-sub">TOUR AND TRAVEL</span>
         </div>
       </a>
-      <ul class="nav-links">
-        <li><a href="#home">Home</a></li>
-        <li><a href="#packages">Packages</a></li>
-        <li><a href="#destinations">Destinations</a></li>
-        <li><a href="#sacred">Sacred Sites</a></li>
-        <li><a href="#hotels">Hotels</a></li>
-        <li><a href="#gallery">Gallery</a></li>
-        <li><a href="#about-section">About</a></li>
-        <li><a href="#services">Services</a></li>
-        <li><a href="#contact">Contact</a></li>
-        <li><button onclick="openOwnerLogin()" class="btn-owner-nav"><i class="fa-solid fa-gauge-high"></i> Owner & CRM</button></li>
+
+      <!-- Hamburger Menu Toggle Button (Top Right) -->
+      <button class="menu-toggle" onclick="toggleMenu()" aria-label="Toggle Navigation">
+        <i class="fa-solid fa-bars" id="menuIcon"></i>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <!-- Contact Info inside mobile menu -->
+        <div class="menu-contact-info">
+          <a href="mailto:sundazeventures@gmail.com"><i class="fa-solid fa-envelope"></i> sundazeventures@gmail.com</a>
+          <a href="tel:7006589250"><i class="fa-solid fa-phone"></i> 7006589250</a>
+        </div>
+        <li><a href="#home" onclick="closeMenu()">Home</a></li>
+        <li><a href="#packages" onclick="closeMenu()">Packages</a></li>
+        <li><a href="#destinations" onclick="closeMenu()">Destinations</a></li>
+        <li><a href="#sacred" onclick="closeMenu()">Sacred Sites</a></li>
+        <li><a href="#hotels" onclick="closeMenu()">Hotels</a></li>
+        <li><a href="#gallery" onclick="closeMenu()">Gallery</a></li>
+        <li><a href="#about-section" onclick="closeMenu()">About</a></li>
+        <li><a href="#services" onclick="closeMenu()">Services</a></li>
+        <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+        <li><button onclick="openOwnerLogin(); closeMenu();" class="btn-owner-nav"><i class="fa-solid fa-gauge-high"></i> Owner & CRM</button></li>
       </ul>
     </nav>
   </header>
@@ -1516,6 +1575,28 @@
   </div>
 
   <script>
+    // Mobile Navigation Toggle
+    function toggleMenu() {
+      const navLinks = document.getElementById('navLinks');
+      const menuIcon = document.getElementById('menuIcon');
+      navLinks.classList.toggle('active');
+      if (navLinks.classList.contains('active')) {
+        menuIcon.classList.remove('fa-bars');
+        menuIcon.classList.add('fa-xmark');
+      } else {
+        menuIcon.classList.remove('fa-xmark');
+        menuIcon.classList.add('fa-bars');
+      }
+    }
+
+    function closeMenu() {
+      const navLinks = document.getElementById('navLinks');
+      const menuIcon = document.getElementById('menuIcon');
+      navLinks.classList.remove('active');
+      menuIcon.classList.remove('fa-xmark');
+      menuIcon.classList.add('fa-bars');
+    }
+
     const defaultPackages = [
       {
         id: "vaishno",
@@ -2871,7 +2952,7 @@
 
         <div style="margin-left:auto; width:280px; display:flex; flex-direction:column; gap:6px;">
           <div style="display:flex; justify-content:space-between; font-size:0.9rem;"><span>Total Package:</span><span>₹${total.toLocaleString('en-IN')}</span></div>
-          <div style="display:flex; justify-content:space-files; font-size:0.9rem;"><span>Advance Paid:</span><span style="color:#10b981;">₹${advance.toLocaleString('en-IN')}</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:0.9rem;"><span>Advance Paid:</span><span style="color:#10b981;">₹${advance.toLocaleString('en-IN')}</span></div>
           <div style="display:flex; justify-content:space-between; font-size:1.15rem; font-weight:800; border-top:2px solid var(--heading-green); padding-top:6px; color:var(--heading-green);"><span>Balance Due:</span><span>₹${balance.toLocaleString('en-IN')}</span></div>
         </div>
 
