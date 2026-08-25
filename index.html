@@ -48,7 +48,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, query, orderBy, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
         import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { getStorage } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
@@ -68,7 +68,7 @@
         const auth = getAuth(app);
         const storage = getStorage(app);
 
-        window.FB = { db, auth, storage, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, query, orderBy, serverTimestamp };
+        window.FB = { db, auth, storage, collection, addDoc, getDocs, doc, setDoc, deleteDoc, updateDoc, query, orderBy, serverTimestamp, getDoc };
         window.dispatchEvent(new Event('firebase-loaded'));
     </script>
 
@@ -1003,7 +1003,7 @@
         </div>
     </div>
 
-    <!-- FRONTEND JAVASCRIPT & STATE ENGINE -->
+    <!-- FRONTEND JAVASCRIPT & STATE ENGINE (FIREBASE SYNCED) -->
     <script>
         const defaultState = {
             admin: { user: 'raashid', pass: '123' },
@@ -1171,11 +1171,35 @@
             ]
         };
 
-        let appData = JSON.parse(localStorage.getItem('sundaze_data_v10')) || defaultState;
+        let appData = defaultState;
 
-        function persistData() {
-            localStorage.setItem('sundaze_data_v10', JSON.stringify(appData));
+        // Fetch Data from Firebase Firestore
+        window.addEventListener('firebase-loaded', async () => {
+            const { db, doc, getDoc } = window.FB;
+            try {
+                const docRef = doc(db, "settings", "main_config");
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    appData = docSnap.data();
+                } else {
+                    await setDoc(docRef, defaultState);
+                }
+            } catch (err) {
+                console.log("Error loading from Firebase, using default:", err);
+            }
             renderUI();
+        });
+
+        async function persistData() {
+            renderUI();
+            window.addEventListener('firebase-loaded', async () => {
+                const { db, doc, setDoc } = window.FB;
+                try {
+                    await setDoc(doc(db, "settings", "main_config"), appData);
+                } catch (err) {
+                    console.log("Error saving to Firebase:", err);
+                }
+            }, { once: true });
         }
 
         // Hero Slideshow Logic
@@ -1872,8 +1896,6 @@
             });
             e.target.reset();
         });
-
-        renderUI();
     </script>
 </body>
 </html>
