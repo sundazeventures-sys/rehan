@@ -1003,7 +1003,7 @@
         </div>
     </div>
 
-    <!-- FRONTEND JAVASCRIPT & STATE ENGINE (FIREBASE SYNCED) -->
+    <!-- FRONTEND JAVASCRIPT & STATE ENGINE (FULLY FIREBASE SYNCED) -->
     <script>
         const defaultState = {
             admin: { user: 'raashid', pass: '123' },
@@ -1173,9 +1173,9 @@
 
         let appData = defaultState;
 
-        // Fetch Data from Firebase Firestore
+        // Fetch Data from Firebase on Page Load
         window.addEventListener('firebase-loaded', async () => {
-            const { db, doc, getDoc } = window.FB;
+            const { db, doc, getDoc, setDoc } = window.FB;
             try {
                 const docRef = doc(db, "settings", "main_config");
                 const docSnap = await getDoc(docRef);
@@ -1185,21 +1185,21 @@
                     await setDoc(docRef, defaultState);
                 }
             } catch (err) {
-                console.log("Error loading from Firebase, using default:", err);
+                console.log("Firebase Load Error:", err);
             }
             renderUI();
         });
 
         async function persistData() {
             renderUI();
-            window.addEventListener('firebase-loaded', async () => {
+            if (window.FB && window.FB.db) {
                 const { db, doc, setDoc } = window.FB;
                 try {
                     await setDoc(doc(db, "settings", "main_config"), appData);
                 } catch (err) {
-                    console.log("Error saving to Firebase:", err);
+                    console.log("Firebase Save Error:", err);
                 }
-            }, { once: true });
+            }
         }
 
         // Hero Slideshow Logic
@@ -1386,7 +1386,7 @@
             const checkin = document.getElementById('qb-checkin').value;
             const message = document.getElementById('qb-message').value;
 
-            window.addEventListener('firebase-loaded', () => {
+            if (window.FB && window.FB.db) {
                 const { db, collection, addDoc, serverTimestamp } = window.FB;
                 addDoc(collection(db, "enquiries"), {
                     name,
@@ -1398,7 +1398,7 @@
                     type: 'Direct Item Booking Modal',
                     createdAt: serverTimestamp()
                 }).catch(err => console.log(err));
-            }, { once: true });
+            }
 
             const waMsg = `Hello Sundaze Ventures,%0A%0AI want to book/enquire about: *${encodeURIComponent(itemName)}*%0A- Name: ${encodeURIComponent(name)}%0A- Phone: ${encodeURIComponent(phone)}%0A- Persons: ${encodeURIComponent(persons)}%0A- Tentative Check-in: ${encodeURIComponent(checkin)}%0A- Message: ${encodeURIComponent(message || 'N/A')}`;
             window.open(`https://wa.me/91${appData.brand.phone}?text=${waMsg}`, '_blank');
@@ -1846,10 +1846,10 @@
         function closeGenericModal() { document.getElementById('generic-admin-modal').classList.add('hidden'); }
 
         function handleLeadSubmission(formData) {
-            window.addEventListener('firebase-loaded', () => {
+            if (window.FB && window.FB.db) {
                 const { db, collection, addDoc, serverTimestamp } = window.FB;
                 addDoc(collection(db, "enquiries"), { ...formData, createdAt: serverTimestamp() }).catch(e => console.log(e));
-            }, { once: true });
+            }
 
             const waMsg = `Hello Sundaze Ventures,%0A%0AI want to book / enquire:%0AName: ${formData.name}%0APhone: ${formData.phone}%0ADate: ${formData.travelDate || formData.arrivalDate}%0ADetails: ${formData.destination || formData.message || 'Custom Booking'}`;
             window.open(`https://wa.me/91${appData.brand.phone}?text=${waMsg}`, '_blank');
